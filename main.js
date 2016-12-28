@@ -21,13 +21,23 @@ var KEY_MAP = {
   40: { human: 'down',  axis: 'top',  direction: POSITIVE_DIRECTION, max: MAX_DOWN },
 }
 
+var MOVING = false;
+var DIRECTION = 'right'; // default, but gets changed
+
 document.addEventListener('DOMContentLoaded', function(event) {
   const pacman = document.getElementById('pacman');
 
-  // move right on load
-  setDirectionAndStart('right');
+  const playControlButton = document.getElementById('playControl');
 
-  document.addEventListener('keydown', watchArrowKeyPresses);
+  playControlButton.addEventListener('click', function() {
+    if (MOVING === false) {
+      startMovement(DIRECTION);
+      playControlButton.textContent = 'Pause';
+    } else {
+      stopMovement();
+      playControlButton.textContent = 'Start';
+    }
+  });
 });
 
 function move(pacman, keyInfo) {
@@ -38,17 +48,18 @@ function move(pacman, keyInfo) {
   var currentPosition = +pacman.style[moveAxis].split('px')[0];
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
-    stopMovement();
+    endGame();
   } else {
     var nextPos = currentPosition + (moveDirection * STEPSIZE);
     pacman.style[moveAxis] = nextPos + 'px';
   }
 }
 
-function stopMovement() {
-  console.log('Stopping game...');
-  window.clearInterval(window.movementInterval);
-  document.removeEventListener('keydown', watchArrowKeyPresses);
+function endGame() {
+  stopMovement();
+  const playControlButton = document.getElementById('playControl');
+  playControlButton.textContent = 'Start';
+  window.alert('Game over :(');
 }
 
 function watchArrowKeyPresses(event) {
@@ -56,7 +67,7 @@ function watchArrowKeyPresses(event) {
 
   if (!keyInfo) { return; }
 
-  setDirectionAndStart(keyInfo.human);
+  startMovement(keyInfo.human);
 }
 
 function isOutOfBounds(current, max, direction) {
@@ -67,9 +78,11 @@ function isOutOfBounds(current, max, direction) {
   }
 }
 
-function setDirectionAndStart(direction) {
+function startMovement(direction) {
+  DIRECTION = direction;
+
   var matchingKeyCode = Object.keys(KEY_MAP).find(function(keyCode) {
-    return KEY_MAP[keyCode].human === direction;
+    return KEY_MAP[keyCode].human === DIRECTION;
   });
 
   var keyInfo = KEY_MAP[matchingKeyCode];
@@ -78,4 +91,14 @@ function setDirectionAndStart(direction) {
   window.movementInterval = window.setInterval(
     move.bind(this, pacman, keyInfo), MOVE_INTERVAL
   );
+
+  MOVING = true;
+  document.addEventListener('keydown', watchArrowKeyPresses);
+}
+
+
+function stopMovement() {
+  window.clearInterval(window.movementInterval);
+  document.removeEventListener('keydown', watchArrowKeyPresses);
+  MOVING = false;
 }

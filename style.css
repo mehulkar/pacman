@@ -19,3 +19,14 @@ body {
   border-radius: 50%;
   background: yellow;
 }
+
+.btn-wrapper {
+  display: flex;
+  align-items:center;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.btn {
+  cursor: pointer;
+}
