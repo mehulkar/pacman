@@ -1,0 +1,21 @@
+body {
+  display: flex;
+  align-items:center;
+  flex-direction:column;
+  justify-content: center;
+}
+
+#mainframe {
+  background: salmon;
+  height: 600px;
+  width: 600px;
+  position:relative;
+}
+
+#mainframe #pacman {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: yellow;
+}
