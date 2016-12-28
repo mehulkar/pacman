@@ -12,6 +12,8 @@ const NEGATIVE_DIRECTION = -1;
 
 const MOVE_INTERVAL = 100;
 
+const PACMAN_DIAMETER = 30;
+
 var KEY_MAP = {
   37: { human: 'left',  axis: 'left', direction: NEGATIVE_DIRECTION, max: MAX_LEFT },
   39: { human: 'right', axis: 'left', direction: POSITIVE_DIRECTION, max: MAX_RIGHT },
@@ -37,9 +39,6 @@ function move(pacman, keyInfo) {
   var max             = keyInfo.max;
 
   var currentPosition = +pacman.style[moveAxis].split('px')[0];
-
-  // this could also be width since it's a perfect circle
-  var diameter        = pacman.offsetHeight;
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
     stopMovement();
@@ -69,9 +68,9 @@ function watchArrowKeyPresses(event) {
 }
 
 function isOutOfBounds(current, max, direction) {
-  if (direction === 1) {
-    return current > max;
+  if (direction === POSITIVE_DIRECTION) {
+    return current >= (max - PACMAN_DIAMETER);
   } else {
-    return current < max;
+    return current <= max;
   }
 }
