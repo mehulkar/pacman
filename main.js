@@ -27,17 +27,8 @@ var DIRECTION = 'right'; // default, but gets changed
 document.addEventListener('DOMContentLoaded', function(event) {
   const pacman = document.getElementById('pacman');
 
-  const playControlButton = document.getElementById('playControl');
 
-  playControlButton.addEventListener('click', function() {
-    if (MOVING === false) {
-      startMovement(DIRECTION);
-      playControlButton.textContent = 'Pause';
-    } else {
-      stopMovement();
-      playControlButton.textContent = 'Start';
-    }
-  });
+  bindPlayPauseButton()
 });
 
 function move(pacman, keyInfo) {
@@ -96,9 +87,22 @@ function startMovement(direction) {
   document.addEventListener('keydown', watchArrowKeyPresses);
 }
 
-
 function stopMovement() {
   window.clearInterval(window.movementInterval);
   document.removeEventListener('keydown', watchArrowKeyPresses);
   MOVING = false;
+}
+
+function bindPlayPauseButton() {
+  const playControlButton = document.getElementById('playControl');
+
+  playControlButton.addEventListener('click', function() {
+    if (MOVING === false) {
+      startMovement(DIRECTION);
+      playControlButton.textContent = 'Pause';
+    } else {
+      stopMovement();
+      playControlButton.textContent = 'Start';
+    }
+  });
 }
