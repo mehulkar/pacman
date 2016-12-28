@@ -32,12 +32,14 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
 function move(pacman, keyInfo) {
 
-  var moveAxis = keyInfo.axis;
-  var moveDirection = keyInfo.direction;
-  var max = keyInfo.max;
+  var moveAxis        = keyInfo.axis;
+  var moveDirection   = keyInfo.direction;
+  var max             = keyInfo.max;
 
   var currentPosition = +pacman.style[moveAxis].split('px')[0];
-  var diameter = pacman.offsetHeight; // this could also be width since it's a perfect circle
+
+  // this could also be width since it's a perfect circle
+  var diameter        = pacman.offsetHeight;
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
     stopMovement();
@@ -65,7 +67,6 @@ function watchArrowKeyPresses(event) {
     move.bind(this, pacman, keyInfo),
   MOVE_INTERVAL);
 }
-
 
 function isOutOfBounds(current, max, direction) {
   if (direction === 1) {
