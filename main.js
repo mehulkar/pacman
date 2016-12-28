@@ -5,12 +5,12 @@ const MAX_LEFT = 0;
 const MAX_DOWN = 600;
 const MAX_UP = 0;
 
-const STEPSIZE = 10;
+const STEPSIZE = 30;
 
 const POSITIVE_DIRECTION = 1;
 const NEGATIVE_DIRECTION = -1;
 
-const MOVE_INTERVAL = 100;
+const MOVE_INTERVAL = 200;
 
 const PACMAN_DIAMETER = 30;
 
@@ -27,9 +27,18 @@ var DIRECTION = 'right'; // default, but gets changed
 document.addEventListener('DOMContentLoaded', function(event) {
   const pacman = document.getElementById('pacman');
 
-
+  drawAndas()
   bindPlayPauseButton()
 });
+
+function drawAndas() {
+  const mainFrame = document.getElementById('mainframe');
+
+  var numToDraw = 400;
+  for (var i = 0; i < numToDraw; i++) {
+    mainFrame.appendChild(document.createElement('anda'))
+  }
+}
 
 function move(pacman, keyInfo) {
   var moveAxis        = keyInfo.axis;

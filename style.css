@@ -9,7 +9,9 @@ body {
   background: salmon;
   height: 600px;
   width: 600px;
-  position:relative;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 #mainframe #pacman {
@@ -18,6 +20,14 @@ body {
   height: 30px;
   border-radius: 50%;
   background: yellow;
+}
+
+#mainframe anda {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: white;
+  margin: 12.5px;
 }
 
 .btn-wrapper {
