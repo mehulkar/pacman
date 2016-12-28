@@ -25,9 +25,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
   const pacman = document.getElementById('pacman');
 
   // move right on load
-  window.movementInterval = window.setInterval(
-    move.bind(this, pacman, KEY_MAP[39]),
-  MOVE_INTERVAL);
+  setDirectionAndStart('right');
 
   document.addEventListener('keydown', watchArrowKeyPresses);
 });
@@ -58,10 +56,7 @@ function watchArrowKeyPresses(event) {
 
   if (!keyInfo) { return; }
 
-  window.clearInterval(window.movementInterval);
-  window.movementInterval = window.setInterval(
-    move.bind(this, pacman, keyInfo),
-  MOVE_INTERVAL);
+  setDirectionAndStart(keyInfo.human);
 }
 
 function isOutOfBounds(current, max, direction) {
@@ -70,4 +65,17 @@ function isOutOfBounds(current, max, direction) {
   } else {
     return current <= max;
   }
+}
+
+function setDirectionAndStart(direction) {
+  var matchingKeyCode = Object.keys(KEY_MAP).find(function(keyCode) {
+    return KEY_MAP[keyCode].human === direction;
+  });
+
+  var keyInfo = KEY_MAP[matchingKeyCode];
+
+  window.clearInterval(window.movementInterval);
+  window.movementInterval = window.setInterval(
+    move.bind(this, pacman, keyInfo), MOVE_INTERVAL
+  );
 }
