@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
 });
 
 function move(pacman, keyInfo) {
-
   var moveAxis        = keyInfo.axis;
   var moveDirection   = keyInfo.direction;
   var max             = keyInfo.max;
@@ -55,8 +54,6 @@ function stopMovement() {
 }
 
 function watchArrowKeyPresses(event) {
-  const pacman = document.getElementById('pacman');
-
   var keyInfo = KEY_MAP[event.keyCode]
 
   if (!keyInfo) { return; }
