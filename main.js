@@ -34,9 +34,27 @@ document.addEventListener('DOMContentLoaded', function(event) {
 function drawAndas() {
   const mainFrame = document.getElementById('mainframe');
 
-  var numToDraw = 400;
+  var numToDraw   = 400;
+  var rows        = [];
+  var currentRow  = []
+
   for (var i = 0; i < numToDraw; i++) {
-    mainFrame.appendChild(document.createElement('anda'))
+    var anda  = document.createElement('anda');
+
+    currentRow.push(anda);
+
+    var left  = currentRow.indexOf(anda) * 30;
+    var top   = rows.length * 30;
+
+    anda.style.left = left + 'px';
+    anda.style.top  = top + 'px';
+
+    if (left + 30 >= 600) {
+      rows.push(currentRow);
+      currentRow = [];
+    }
+
+    mainFrame.appendChild(anda);
   }
 }
 
