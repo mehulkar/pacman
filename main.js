@@ -66,18 +66,11 @@ function move(pacman, keyInfo) {
   var currentPosition = +pacman.style[moveAxis].split('px')[0];
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
-    endGame();
+    stopMovement();
   } else {
     var nextPos = currentPosition + (moveDirection * STEPSIZE);
     pacman.style[moveAxis] = nextPos + 'px';
   }
-}
-
-function endGame() {
-  stopMovement();
-  const playControlButton = document.getElementById('playControl');
-  playControlButton.textContent = 'Start';
-  window.alert('Game over :(');
 }
 
 function watchArrowKeyPresses(event) {
@@ -106,8 +99,10 @@ function startMovement(direction) {
   var keyInfo = KEY_MAP[matchingKeyCode];
 
   window.clearInterval(window.movementInterval);
+
   window.movementInterval = window.setInterval(
-    move.bind(this, pacman, keyInfo), MOVE_INTERVAL
+    move.bind(this, pacman, keyInfo),
+    MOVE_INTERVAL
   );
 
   MOVING = true;
@@ -116,7 +111,6 @@ function startMovement(direction) {
 
 function stopMovement() {
   window.clearInterval(window.movementInterval);
-  document.removeEventListener('keydown', watchArrowKeyPresses);
   MOVING = false;
 }
 
