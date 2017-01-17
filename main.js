@@ -20,13 +20,38 @@ var KEY_MAP = {
   38: { human: 'up',    axis: 'top',  direction: NEGATIVE_DIRECTION, max: MAX_UP },
   40: { human: 'down',  axis: 'top',  direction: POSITIVE_DIRECTION, max: MAX_DOWN },
 }
+const pacmanObject = {
+  moving: false,
+  direction: 'right', // default
+  coordinates: [0, 0],
 
-var MOVING = false;
-var DIRECTION = 'right'; // default, but gets changed
+  currentMoveAxis() {
+    let kc = Object.keys(KEY_MAP).find(keyCode => {
+      return KEY_MAP[keyCode].human === this.direction;
+    });
+
+    return KEY_MAP[kc].axis;
+  },
+
+  move(direction) {
+    // TODO: set direction
+    // TODO: set coordinates
+    // change DOMelement style
+    let currentPosition = this.currentPosition();
+    let moveAxis = this.currentMoveAxis();
+    var nextPos = currentPosition + (direction * STEPSIZE);
+    pacmanObject.DOMelement.style[moveAxis] = nextPos + 'px';
+  },
+
+  currentPosition() {
+    let moveAxis = this.currentMoveAxis();
+    return +this.DOMelement.style[moveAxis].split('px')[0];
+  }
+};
+
 
 document.addEventListener('DOMContentLoaded', function(event) {
-  const pacman = document.getElementById('pacman');
-
+  pacmanObject.DOMelement = document.getElementById('pacman');
   drawAndas()
   bindPlayPauseButton()
 });
@@ -58,18 +83,17 @@ function drawAndas() {
   }
 }
 
-function move(pacman, keyInfo) {
+function move(pacmanObject, keyInfo) {
   var moveAxis        = keyInfo.axis;
   var moveDirection   = keyInfo.direction;
   var max             = keyInfo.max;
 
-  var currentPosition = +pacman.style[moveAxis].split('px')[0];
+  var currentPosition = +pacmanObject.DOMelement.style[moveAxis].split('px')[0];
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
     stopMovement();
   } else {
-    var nextPos = currentPosition + (moveDirection * STEPSIZE);
-    pacman.style[moveAxis] = nextPos + 'px';
+    pacmanObject.move(moveDirection);
   }
 }
 
@@ -90,10 +114,10 @@ function isOutOfBounds(current, max, direction) {
 }
 
 function startMovement(direction) {
-  DIRECTION = direction;
+  pacmanObject.direction = direction;
 
   var matchingKeyCode = Object.keys(KEY_MAP).find(function(keyCode) {
-    return KEY_MAP[keyCode].human === DIRECTION;
+    return KEY_MAP[keyCode].human === pacmanObject.direction;
   });
 
   var keyInfo = KEY_MAP[matchingKeyCode];
@@ -101,25 +125,25 @@ function startMovement(direction) {
   window.clearInterval(window.movementInterval);
 
   window.movementInterval = window.setInterval(
-    move.bind(this, pacman, keyInfo),
+    move.bind(this, pacmanObject, keyInfo),
     MOVE_INTERVAL
   );
 
-  MOVING = true;
+  pacmanObject.moving = true;
   document.addEventListener('keydown', watchArrowKeyPresses);
 }
 
 function stopMovement() {
   window.clearInterval(window.movementInterval);
-  MOVING = false;
+  pacmanObject.moving = false;
 }
 
 function bindPlayPauseButton() {
   const playControlButton = document.getElementById('playControl');
 
   playControlButton.addEventListener('click', function() {
-    if (MOVING === false) {
-      startMovement(DIRECTION);
+    if (pacmanObject.moving === false) {
+      startMovement(pacmanObject.direction);
       playControlButton.textContent = 'Pause';
     } else {
       stopMovement();
