@@ -35,7 +35,18 @@ const pacmanObject = {
 
   move(direction) {
     // TODO: set direction
-    // TODO: set coordinates
+
+    // set coordinates
+    if(this.direction === 'right'){
+      this.coordinates[0] += 1;
+    } else if(this.direction === 'left'){
+      this.coordinates[0] -= 1;
+    } else if(this.direction === 'up'){
+      this.coordinates[1] += 1;
+    } else if(this.direction === 'down'){
+      this.coordinates[1] -= 1;
+    }
+
     // change DOMelement style
     let currentPosition = this.currentPosition();
     let cssProperty = this.currentCssProperty();
