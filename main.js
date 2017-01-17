@@ -15,22 +15,22 @@ const MOVE_INTERVAL = 200;
 const PACMAN_DIAMETER = 30;
 
 var KEY_MAP = {
-  37: { human: 'left',  axis: 'left', direction: NEGATIVE_DIRECTION, max: MAX_LEFT },
-  39: { human: 'right', axis: 'left', direction: POSITIVE_DIRECTION, max: MAX_RIGHT },
-  38: { human: 'up',    axis: 'top',  direction: NEGATIVE_DIRECTION, max: MAX_UP },
-  40: { human: 'down',  axis: 'top',  direction: POSITIVE_DIRECTION, max: MAX_DOWN },
+  37: { human: 'left',  cssProperty: 'left', direction: NEGATIVE_DIRECTION, max: MAX_LEFT },
+  39: { human: 'right', cssProperty: 'left', direction: POSITIVE_DIRECTION, max: MAX_RIGHT },
+  38: { human: 'up',    cssProperty: 'top', direction: NEGATIVE_DIRECTION, max: MAX_UP },
+  40: { human: 'down',  cssProperty: 'top', direction: POSITIVE_DIRECTION, max: MAX_DOWN },
 }
 const pacmanObject = {
   moving: false,
   direction: 'right', // default
   coordinates: [0, 0],
 
-  currentMoveAxis() {
+  currentCssProperty() {
     let kc = Object.keys(KEY_MAP).find(keyCode => {
       return KEY_MAP[keyCode].human === this.direction;
     });
 
-    return KEY_MAP[kc].axis;
+    return KEY_MAP[kc].cssProperty;
   },
 
   move(direction) {
@@ -38,14 +38,14 @@ const pacmanObject = {
     // TODO: set coordinates
     // change DOMelement style
     let currentPosition = this.currentPosition();
-    let moveAxis = this.currentMoveAxis();
+    let cssProperty = this.currentCssProperty();
     var nextPos = currentPosition + (direction * STEPSIZE);
-    pacmanObject.DOMelement.style[moveAxis] = nextPos + 'px';
+    pacmanObject.DOMelement.style[cssProperty] = nextPos + 'px';
   },
 
   currentPosition() {
-    let moveAxis = this.currentMoveAxis();
-    return +this.DOMelement.style[moveAxis].split('px')[0];
+    let cssProperty = this.currentCssProperty();
+    return +this.DOMelement.style[cssProperty].split('px')[0];
   }
 };
 
@@ -84,11 +84,11 @@ function drawAndas() {
 }
 
 function move(pacmanObject, keyInfo) {
-  var moveAxis        = keyInfo.axis;
+  var cssProperty     = keyInfo.cssProperty;
   var moveDirection   = keyInfo.direction;
   var max             = keyInfo.max;
 
-  var currentPosition = +pacmanObject.DOMelement.style[moveAxis].split('px')[0];
+  var currentPosition = +pacmanObject.DOMelement.style[cssProperty].split('px')[0];
 
   if (isOutOfBounds(currentPosition, max, moveDirection)) {
     stopMovement();
