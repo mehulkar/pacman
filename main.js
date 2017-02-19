@@ -34,18 +34,6 @@ const pacmanObject = {
   },
 
   move(direction) {
-    // set coordinates
-
-    if(this.direction === 'right'){
-      this.coordinates[0] += 1;
-    } else if(this.direction === 'left'){
-      this.coordinates[0] -= 1;
-    } else if(this.direction === 'up'){
-      this.coordinates[1] += 1;
-    } else if(this.direction === 'down'){
-      this.coordinates[1] -= 1;
-    }
-
     // change DOMelement style
     let currentPosition = this.currentPosition();
     let cssProperty = this.currentCssProperty();
@@ -67,7 +55,21 @@ var Board = {
 
   setPacman: function(pacmanObject) {
     this.pacman = pacmanObject;
-  }
+  },
+
+  movePacman: function(direction) {
+    if(this.pacman.direction === 'right'){
+      this.pacman.coordinates[0] += 1;
+    } else if(this.pacman.direction === 'left'){
+      this.pacman.coordinates[0] -= 1;
+    } else if(this.pacman.direction === 'up'){
+      this.pacman.coordinates[1] += 1;
+    } else if(this.pacman.direction === 'down'){
+      this.pacman.coordinates[1] -= 1;
+    }
+
+    this.pacman.move(direction);
+  },
 
   drawAndas: function() {
     var numToDraw   = 400;
@@ -113,24 +115,10 @@ var Board = {
 
 document.addEventListener('DOMContentLoaded', function(event) {
   pacmanObject.DOMelement = document.getElementById('pacman');
-  Board.drawAndas()
-  Board.setPacman(pacmanObject)
+  Board.drawAndas();
+  Board.setPacman(pacmanObject);
   bindPlayPauseButton()
 });
-
-function move(pacmanObject, keyInfo) {
-  var cssProperty     = keyInfo.cssProperty;
-  var moveDirection   = keyInfo.direction;
-  var max             = keyInfo.max;
-
-  var currentPosition = +pacmanObject.DOMelement.style[cssProperty].split('px')[0];
-
-  if (isOutOfBounds(currentPosition, max, moveDirection)) {
-    stopMovement();
-  } else {
-    pacmanObject.move(moveDirection);
-  }
-}
 
 function watchArrowKeyPresses(event) {
   var keyInfo = KEY_MAP[event.keyCode]
@@ -149,10 +137,10 @@ function isOutOfBounds(current, max, direction) {
 }
 
 function startMovement(direction) {
-  pacmanObject.direction = direction;
+  Board.pacman.direction = direction;
 
   var matchingKeyCode = Object.keys(KEY_MAP).find(function(keyCode) {
-    return KEY_MAP[keyCode].human === pacmanObject.direction;
+    return KEY_MAP[keyCode].human === Board.pacman.direction;
   });
 
   var keyInfo = KEY_MAP[matchingKeyCode];
@@ -160,12 +148,26 @@ function startMovement(direction) {
   window.clearInterval(window.movementInterval);
 
   window.movementInterval = window.setInterval(
-    move.bind(this, pacmanObject, keyInfo),
+    move.bind(this, Board.pacman, keyInfo),
     MOVE_INTERVAL
   );
 
-  pacmanObject.moving = true;
+  Board.pacman.moving = true;
   document.addEventListener('keydown', watchArrowKeyPresses);
+}
+
+function move(pacmanObject, keyInfo) {
+  var cssProperty     = keyInfo.cssProperty;
+  var moveDirection   = keyInfo.direction;
+  var max             = keyInfo.max;
+
+  var currentPosition = +pacmanObject.DOMelement.style[cssProperty].split('px')[0];
+
+  if (isOutOfBounds(currentPosition, max, moveDirection)) {
+    stopMovement();
+  } else {
+    Board.movePacman(moveDirection);
+  }
 }
 
 function stopMovement() {
