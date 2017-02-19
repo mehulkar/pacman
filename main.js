@@ -63,58 +63,60 @@ var Board = {
   rows: [],
   DOMelement: function() {
     return document.getElementById('mainframe');
+  },
+
+  setPacman: function(pacmanObject) {
+    this.pacman = pacmanObject;
+  }
+
+  drawAndas: function() {
+    var numToDraw   = 400;
+    var rows        = this.rows;
+    var currentRow  = [];
+
+    var rowNumber = 0;
+
+    for (var i = 0; i < numToDraw; i++) {
+      var anda  = document.createElement('anda');
+
+      var cell = {
+        anda: anda,
+        x: 1,
+        y: 1
+      }
+
+      currentRow.push(cell);
+
+      var index = currentRow.indexOf(cell);
+
+      var left  =  index* 30;
+      var top   = rows.length * 30;
+
+      anda.style.left = left + 'px';
+      anda.style.top  = top + 'px';
+
+      cell.x = index + 1;
+      cell.y = rowNumber + 1;
+
+      // complete row and create new row
+      if (left + 30 >= 600) {
+        rows.push(currentRow);
+        rowNumber++;
+        console.log(`rowNumber is now ${rowNumber}`);
+        currentRow = [];
+      }
+
+      this.DOMelement().appendChild(anda);
+    }
   }
 }
 
 document.addEventListener('DOMContentLoaded', function(event) {
   pacmanObject.DOMelement = document.getElementById('pacman');
-  drawAndas()
+  Board.drawAndas()
+  Board.setPacman(pacmanObject)
   bindPlayPauseButton()
 });
-
-function drawAndas() {
-
-  const mainFrame = Board.DOMelement();
-
-  var numToDraw   = 400;
-  var rows        = Board.rows;
-  var currentRow  = [];
-
-  var rowNumber = 0;
-
-  for (var i = 0; i < numToDraw; i++) {
-    var anda  = document.createElement('anda');
-
-    var cell = {
-      anda: anda,
-      x: 1,
-      y: 1
-    }
-
-    currentRow.push(cell);
-
-    var index = currentRow.indexOf(cell);
-
-    var left  =  index* 30;
-    var top   = rows.length * 30;
-
-    anda.style.left = left + 'px';
-    anda.style.top  = top + 'px';
-
-    cell.x = index + 1;
-    cell.y = rowNumber + 1;
-
-    // complete row and create new row
-    if (left + 30 >= 600) {
-      rows.push(currentRow);
-      rowNumber++;
-      console.log(`rowNumber is now ${rowNumber}`);
-      currentRow = [];
-    }
-
-    mainFrame.appendChild(anda);
-  }
-}
 
 function move(pacmanObject, keyInfo) {
   var cssProperty     = keyInfo.cssProperty;
