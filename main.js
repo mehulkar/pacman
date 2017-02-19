@@ -79,26 +79,25 @@ var Board = {
     var rowNumber = 0;
 
     for (var i = 0; i < numToDraw; i++) {
-      var anda  = document.createElement('anda');
 
-      var cell = {
-        anda: anda,
+      var anda = {
         x: 1,
-        y: 1
+        y: 1,
+        DOMelement: document.createElement('anda'),
       }
 
-      currentRow.push(cell);
+      currentRow.push(anda);
 
-      var cellIndex = currentRow.indexOf(cell);
+      var andaIndex = currentRow.indexOf(anda);
 
-      var left  = cellIndex * 30;
-      var top   = rows.length * 30;
+      var left = andaIndex * 30;
+      // set position of of element
+      anda.DOMelement.style.left = left + 'px';
+      anda.DOMelement.style.top  = rows.length * 30 + 'px';
 
-      anda.style.left = left + 'px';
-      anda.style.top  = top + 'px';
-
-      cell.x = cellIndex + 1;
-      cell.y = rowNumber + 1;
+      // set coordinates
+      anda.x = andaIndex + 1;
+      anda.y = rowNumber + 1;
 
       // complete row and create new row
       if (left + 30 >= 600) {
@@ -107,7 +106,7 @@ var Board = {
         currentRow = [];
       }
 
-      this.DOMelement().appendChild(anda);
+      this.DOMelement().appendChild(anda.DOMelement);
     }
   }
 }
