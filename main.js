@@ -34,9 +34,8 @@ const pacmanObject = {
   },
 
   move(direction) {
-    // TODO: set direction
-
     // set coordinates
+
     if(this.direction === 'right'){
       this.coordinates[0] += 1;
     } else if(this.direction === 'left'){
@@ -72,26 +71,44 @@ function drawAndas() {
 
   var numToDraw   = 400;
   var rows        = [];
-  var currentRow  = []
+  var currentRow  = [];
+
+  var rowNumber = 0;
 
   for (var i = 0; i < numToDraw; i++) {
     var anda  = document.createElement('anda');
 
-    currentRow.push(anda);
+    var cell = {
+      anda: anda,
+      x: 1,
+      y: 1
+    }
 
-    var left  = currentRow.indexOf(anda) * 30;
+    currentRow.push(cell);
+
+    var index = currentRow.indexOf(cell);
+
+    var left  =  index* 30;
     var top   = rows.length * 30;
 
     anda.style.left = left + 'px';
     anda.style.top  = top + 'px';
 
+    cell.x = index + 1;
+    cell.y = rowNumber + 1;
+
+    // complete row and create new row
     if (left + 30 >= 600) {
       rows.push(currentRow);
+      rowNumber++;
+      console.log(`rowNumber is now ${rowNumber}`);
       currentRow = [];
     }
 
     mainFrame.appendChild(anda);
   }
+
+  window.rows = rows;
 }
 
 function move(pacmanObject, keyInfo) {
