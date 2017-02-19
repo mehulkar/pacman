@@ -89,22 +89,21 @@ var Board = {
 
       currentRow.push(cell);
 
-      var index = currentRow.indexOf(cell);
+      var cellIndex = currentRow.indexOf(cell);
 
-      var left  =  index* 30;
+      var left  = cellIndex * 30;
       var top   = rows.length * 30;
 
       anda.style.left = left + 'px';
       anda.style.top  = top + 'px';
 
-      cell.x = index + 1;
+      cell.x = cellIndex + 1;
       cell.y = rowNumber + 1;
 
       // complete row and create new row
       if (left + 30 >= 600) {
         rows.push(currentRow);
         rowNumber++;
-        console.log(`rowNumber is now ${rowNumber}`);
         currentRow = [];
       }
 
