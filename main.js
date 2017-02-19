@@ -59,13 +59,13 @@ var Board = {
 
   movePacman: function(direction) {
     if(this.pacman.direction === 'right'){
-      this.pacman.coordinates[0] += 1;
-    } else if(this.pacman.direction === 'left'){
-      this.pacman.coordinates[0] -= 1;
-    } else if(this.pacman.direction === 'up'){
       this.pacman.coordinates[1] += 1;
-    } else if(this.pacman.direction === 'down'){
+    } else if(this.pacman.direction === 'left'){
       this.pacman.coordinates[1] -= 1;
+    } else if(this.pacman.direction === 'up'){
+      this.pacman.coordinates[0] -= 1;
+    } else if(this.pacman.direction === 'down'){
+      this.pacman.coordinates[0] += 1;
     }
 
     this.pacman.move(direction);
