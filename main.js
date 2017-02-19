@@ -24,6 +24,13 @@ const pacmanObject = {
   moving: false,
   direction: 'right', // default
   coordinates: [0, 0],
+  x: function() {
+    return this.coordinates[0];
+  },
+
+  y: function() {
+    return this.coordinates[1];
+  },
 
   currentCssProperty() {
     let kc = Object.keys(KEY_MAP).find(keyCode => {
@@ -67,7 +74,11 @@ var Board = {
     } else if(this.pacman.direction === 'down'){
       this.pacman.coordinates[0] += 1;
     }
+    var anda = Board.rows[this.pacman.x()][this.pacman.y()];
 
+    if (anda.DOMelement) {
+      anda.DOMelement.remove();
+    }
     this.pacman.move(direction);
   },
 
