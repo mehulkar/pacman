@@ -59,6 +59,12 @@ const pacmanObject = {
   }
 };
 
+var Board = {
+  rows: [],
+  DOMelement: function() {
+    return document.getElementById('mainframe');
+  }
+}
 
 document.addEventListener('DOMContentLoaded', function(event) {
   pacmanObject.DOMelement = document.getElementById('pacman');
@@ -67,10 +73,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
 });
 
 function drawAndas() {
-  const mainFrame = document.getElementById('mainframe');
+
+  const mainFrame = Board.DOMelement();
 
   var numToDraw   = 400;
-  var rows        = [];
+  var rows        = Board.rows;
   var currentRow  = [];
 
   var rowNumber = 0;
@@ -107,8 +114,6 @@ function drawAndas() {
 
     mainFrame.appendChild(anda);
   }
-
-  window.rows = rows;
 }
 
 function move(pacmanObject, keyInfo) {
